@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+
+# 运行时产物(如启用 runClient)
+run/
+logs/
+
+# 系统
+Thumbs.db
+tools/
+warm-help.log
+libs/
+build-output.log
+.agent/
+.agent_task_logs/

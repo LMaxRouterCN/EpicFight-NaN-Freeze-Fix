@@ -1,0 +1,42 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MPL-2.0"
+
+[[mods]]
+modId="epicfightnanafreezefix"
+version="1.0.0"
+displayName="EpicFight NaN Freeze Fix"
+authors="LMaxRouterCN"
+description='''
+Fixes the Epic Fight client hard-freeze (MC 1.20.1, Epic Fight 20.14.x):
+a zero-length looping animation makes AnimationPlayer.tick compute
+elapsedTime %= 0.0F, producing NaN that poisons ConcurrentLinkAnimation
+startsAt and drives the render thread into a never-terminating binary
+search inside AnimationClip.getPoseInTime. Root cause analysis:
+https://github.com/Antikythera-Studios/epicfight/issues/2625
+'''
+
+[[dependencies.epicfightnanafreezefix]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.epicfightnanafreezefix]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.21)"
+ordering="NONE"
+side="BOTH"
+
+# epicfight 版本 range 放开(参照 vs2 项目惯例,2026-11-02):
+# 受影响版本范围未逐一验证,不拿未验证的断言当栅栏;mixin 目标若在上游
+# 重构,加载时会响亮地 apply 失败,而不是静默错下去。
+# 实测基准:Epic Fight 20.14.17 / MC 1.20.1。
+[[dependencies.epicfightnanafreezefix]]
+modId="epicfight"
+mandatory=true
+versionRange="[0,)"
+ordering="NONE"
+side="BOTH"

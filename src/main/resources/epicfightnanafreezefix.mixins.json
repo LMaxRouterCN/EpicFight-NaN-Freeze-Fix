@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.lmaxrouter.epicfightnanafreezefix.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AnimationClipMixin",
+    "AnimationPlayerMixin"
+  ],
+  "client": [
+    "ConcurrentLinkAnimationMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

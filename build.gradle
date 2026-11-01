@@ -1,0 +1,130 @@
+plugins {
+    // ModDevGradle legacyforge(继承 vs2-sentinel-guard-fix 骨架):
+    // 2.0.116 —— 本机 modules-2 缓存已有 moddev-gradle 2.0.116 +
+    // neoform-runtime 1.0.43 + AutoRenamingTool 2.0.4 组合(上一项目本机
+    // 完整跑通);maven.neoforged.net 间歇不可达,选缓存版本把它从依赖链挤出去。
+    id 'net.neoforged.moddev.legacyforge' version '2.0.116'
+}
+
+group = 'com.lmaxrouter'
+// modVersion/mcVersion 是版本与发布文件名契约的单一事实源:
+// modVersion = mod 语义版本(mods.toml 内 version 需与此同步);
+// mcVersion = 目标 MC 版本,进发布文件名(legacyForge.version 是完整 Forge
+// 坐标,两者互不替代)。
+def modVersion = '1.0.0'
+def mcVersion = '1.20.1'
+version = modVersion
+base { archivesName = 'epicfight-nan-freeze-fix' }
+
+java {
+    // MC 1.20.1 Forge = Java 17;构建 JVM 即 zulu-17(JAVA_HOME),工具链自匹配
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // javac 平台默认编码在中文 Windows 上是 GBK,源文件是 UTF-8:
+    // 中文注释会触发 "编码 GBK 的不可映射字符" 编译错误(上一项目实踩)
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    // mixin 注解处理器只在 Sponge maven(vs2 项目探测 OK)
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Sponge'
+                url = uri('https://repo.spongepowered.org/repository/maven-public')
+            }
+        }
+        filter {
+            includeGroupAndSubgroups('org.spongepowered')
+        }
+    }
+}
+
+legacyForge {
+    // 与整合包实例一致的 Forge 行;方法级 SRG 名在整个 1.20.1 系列一致
+    version = '1.20.1-47.4.10'
+}
+
+dependencies {
+    // mixin 注解处理器:编译期校验注解。
+    // 本 mod 全部 mixin 目标是 epicfight 自有类(非 MC 类,remap=false),
+    // handler 体内零 MC 方法调用 → 无 refmap 需求。
+    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
+
+    // libs/ 下的 epicfight jar 仅编译期依赖:
+    // 1) mixin AP 目标校验(@Mixin targets 必须在编译 classpath 上);
+    // 2) handler 里引用的目标类及字段(AnimationPlayer.elapsedTime 等)
+    //    需要可见。生产运行时由整合包 mods 目录提供,绝不打进产物。
+    compileOnly fileTree('libs') { include '*.jar' }
+}
+
+jar {
+    // reobfJar(MDG legacyforge 提供):Mojang 名 -> SRG。
+    // 本 mod 虽零 MC 方法调用,链路保持与验证过的骨架一致。
+    finalizedBy 'reobfJar'
+    // 发布文件名契约 {archivesName}-{modVersion}+{mcVersion}-forge.jar
+    archiveFileName = "${base.archivesName.get()}-${modVersion}+${mcVersion}-forge.jar"
+    manifest {
+        // Forge 加载器从 manifest 的 MixinConfigs 发现 mixin 配置(纯 manifest 注册)
+        attributes 'MixinConfigs': 'epicfightnanafreezefix.mixins.json'
+    }
+}
+
+// reobfJar 输出覆写:MDG legacyforge 把发布 jar 写 build/libs,但文件名走
+// 插件自有约定,不继承 jar.archiveFileName(vs2 项目取证,发布链门禁曾在此
+// 拦停)。显式覆写为发布契约名,dev/devlibs 与 prod/libs 产物名一致。
+tasks.named('reobfJar') {
+    archiveFile.set(project.file('build/libs/epicfight-nan-freeze-fix-1.0.0+1.20.1-forge.jar'))
+}
+
+// verifyMixinConfig - 构建期 mixin 配置自洽性守卫(vs2 项目事故的产物):
+// manifest 引用的配置存在 / package 形态合法(双点/空段即拒) /
+// 声明的每个 mixin 类在 jar 内真实存在。不自洽的 jar 无法完成构建。
+tasks.register('verifyMixinConfig') {
+    group = 'verification'
+    description = '校验产物 jar 的 mixin 配置自洽性(MixinConfigs manifest / package 形态 / 声明类存在)'
+    doLast {
+        def libs = layout.buildDirectory.dir('libs').get().asFile
+        def files = libs.listFiles() ?: []
+        def jars = files.findAll { it.name.endsWith('.jar') && !it.name.endsWith('-sources.jar') }
+        if (!jars) throw new GradleException('verifyMixinConfig: build/libs 为空,没有可校验的产物')
+        jars.each { f ->
+            new java.util.zip.ZipFile(f).withCloseable { zip ->
+                def cfgNames = []
+                def mfEntry = zip.getEntry('META-INF/MANIFEST.MF')
+                if (mfEntry != null) {
+                    def manifest = new java.util.jar.Manifest(zip.getInputStream(mfEntry))
+                    def declared = manifest.mainAttributes.getValue('MixinConfigs')
+                    if (declared) cfgNames = declared.split(',').collect { it.trim() }.findAll { !it.empty }
+                }
+                if (cfgNames.isEmpty()) throw new GradleException("verifyMixinConfig: ${f.name} 的 manifest 未声明 MixinConfigs")
+                cfgNames.each { name ->
+                    if (zip.getEntry(name) == null) {
+                        throw new GradleException("verifyMixinConfig: manifest 声明 ${name} 但 ${f.name} 内不存在")
+                    }
+                    def cfg = new groovy.json.JsonSlurper().parse(zip.getInputStream(zip.getEntry(name)))
+                    def pkg = cfg.package
+                    if (!(pkg instanceof String) || pkg.trim().isEmpty()) {
+                        throw new GradleException("verifyMixinConfig: ${name} 的 package 缺失")
+                    }
+                    if (pkg.contains('..') || pkg.startsWith('.') || pkg.endsWith('.')) {
+                        throw new GradleException("verifyMixinConfig: ${name} 的 package '${pkg}' 形态可疑(双点/空段)")
+                    }
+                    def classes = (cfg.mixins ?: []) + (cfg.client ?: [])
+                    if (classes.isEmpty()) throw new GradleException("verifyMixinConfig: ${name} 未声明任何 mixin")
+                    classes.each { cls ->
+                        def path = pkg.replace('.', '/') + '/' + cls + '.class'
+                        if (zip.getEntry(path) == null) {
+                            throw new GradleException("verifyMixinConfig: ${name} 声明 ${pkg}.${cls} 但 ${path} 不在 jar 内")
+                        }
+                    }
+                    logger.lifecycle("verifyMixinConfig: ${f.name} / ${name} OK(${classes.size()} 个 mixin, package=${pkg})")
+                }
+            }
+        }
+    }
+}
+tasks.named('build') { finalizedBy 'verifyMixinConfig' }
