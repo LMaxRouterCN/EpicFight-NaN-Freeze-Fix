@@ -29,7 +29,11 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
  * 自愈性:守卫同时是解药 —— 若 elapsedTime 已被毒化为 NaN(历史 bug 残留
  * 或其他 NaN 源),只要当前播放的是零长循环,下一 tick 即被洗回 0。
  */
-@Mixin(AnimationPlayer.class)
+// remap = false:目标是 epicfight 自有类(1.20.1 Forge 生产环境 mod 类
+// 不混淆,成员名原样保留);MDG 自动给 mixin AP 挂的 searge 映射环境
+// 只含原版成员,不关 remap 时 AP 对每个 @Shadow/@Inject 查映射失败,
+// 直接编译报错 "Unable to locate obfuscation mapping"(2026-11-02 实证)
+@Mixin(value = AnimationPlayer.class, remap = false)
 public abstract class AnimationPlayerMixin {
 
     @Shadow

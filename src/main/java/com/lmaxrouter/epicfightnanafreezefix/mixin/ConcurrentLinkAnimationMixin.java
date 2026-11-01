@@ -25,7 +25,8 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
  * 目标类是 @OnlyIn(Dist.CLIENT),本 mixin 只进 mixins.json 的 client
  * 列表 —— 放进通用列表会在专用服务端直接类加载失败。
  */
-@Mixin(ConcurrentLinkAnimation.class)
+// remap = false:目标为 epicfight 类,生产不混淆;searge 映射无 mod 成员,必须关
+@Mixin(value = ConcurrentLinkAnimation.class, remap = false)
 public abstract class ConcurrentLinkAnimationMixin {
 
     @Shadow

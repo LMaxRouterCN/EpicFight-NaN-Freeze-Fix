@@ -21,7 +21,8 @@ import yesman.epicfight.api.animation.AnimationClip;
  * 注入策略:ModifyVariable 捕获方法入参(HEAD, argsOnly)。目标方法
  * getPoseInTime(float) 无重载,单参数捕获无歧义。
  */
-@Mixin(AnimationClip.class)
+// remap = false:目标为 epicfight 类,生产不混淆;searge 映射无 mod 成员,必须关
+@Mixin(value = AnimationClip.class, remap = false)
 public abstract class AnimationClipMixin {
 
     @ModifyVariable(method = "getPoseInTime", at = @At("HEAD"), argsOnly = true)
