@@ -67,3 +67,11 @@
 - 注释:所有代码创建/修改必须带注释,禁删既有注释
 - 公开信息(git commit/README):中文优先,中英双语
 - License:MPL-2.0(max 偏好;上游 GPL-3.0 注脚:本地自用零风险,公开发布场景的合规评估在发布时做)
+## 构建状态 (2026-11-02)
+
+- BUILD SUCCESSFUL (gradle 8.14.2, 腾讯镜像本地缓存, 冷构建 9m35s)
+- 产物: build/libs/epicfight-nan-freeze-fix-1.0.0+1.20.1-forge.jar (6KB), verifyMixinConfig 3 mixin OK
+- git: 1f34a35(初始) -> cd1a3a7(remap修复+镜像wrapper) -> 本commit, 未推远程
+- 坑1: mixin AP "Unable to locate obfuscation mapping" -> @Mixin(remap=false) x3 [长期记忆: 019]
+- 坑2: services.gradle.org 不可达 -> wrapper 指腾讯镜像, URL哈希命中本地完整缓存, 零下载 [长期记忆: 020]
+- 待游戏内验证: NaN冻结复现场景 + 日志无 mixin apply 报错
