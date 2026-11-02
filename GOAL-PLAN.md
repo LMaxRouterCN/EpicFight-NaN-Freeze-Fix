@@ -57,9 +57,9 @@
 - [x] 修复侦察:两分支验证 / 上游 PR 尸检 / GPL 确认(2026-11-02)
 - [x] 三决策拍板 + 项目目录就位(2026-11-02)
 - [x] GOAL-PLAN / README 落盘
-- [ ] 项目骨架(构建文件 + wrapper + libs)
-- [ ] mixin 三类实现 + mixins.json + mods.toml + pack.mcmeta
-- [ ] 构建通过
+- [x] 项目骨架(构建文件 + wrapper + libs,2026-11-02 落地)
+- [x] mixin 三类实现 + mixins.json + mods.toml + pack.mcmeta(2026-11-02 落地)
+- [x] 构建通过(1.0.0 BUILD SUCCESSFUL;1.0.1 见下方修复记录)
 - [ ] 实测验证
 
 ## 用户规范对齐
@@ -75,3 +75,34 @@
 - 坑1: mixin AP "Unable to locate obfuscation mapping" -> @Mixin(remap=false) x3 [长期记忆: 019]
 - 坑2: services.gradle.org 不可达 -> wrapper 指腾讯镜像, URL哈希命中本地完整缓存, 零下载 [长期记忆: 020]
 - 待游戏内验证: NaN冻结复现场景 + 日志无 mixin apply 报错
+
+
+## 1.0.1 修复记录 (2026-11-03)
+
+### 崩溃(1.0.0 运行时实况)
+- 根因:ConcurrentLinkAnimationMixin handler 尾参误用 CallbackInfo,而目标
+  getPoseByTime 返回非 void(Pose)—— mixin 校验报 "CallbackInfoReturnable
+  is required",APPLY 失败,游戏死。触发链:进世界首帧 LocalPlayer 构造 →
+  epicfight 挂 capability → 目标类首次加载 → mixin 转换爆炸;主菜单不触发
+  目标类加载,装载期全程零报错。
+- 修法:尾参 CallbackInfo → CallbackInfoReturnable<Pose>(javap 实测返回
+  类型),handler 逻辑零改动(不 setReturnValue 不 cancel,纯观察合法)。
+
+### 同款审计(javap 全量实证,2026-11-03)
+- AnimationPlayerMixin:tick 返回 void,CallbackInfo 正确;三 @Shadow
+  (elapsedTime/prevElapsedTime/play)与 javap 全量输出吻合,无罪。
+- AnimationClipMixin:@ModifyVariable 无回调参数,结构上不存在此风险,无罪。
+- dev 依赖 jar(libs\epicfight-20.14.17.jar)与运行时 jar MD5 一致
+  (51D01CFA)→ 编译期普通调用解析可信;remap=false 瞎掉的仅 mixin 回调
+  校验一处,恰为病根,逻辑闭环。
+- 教训固化:mod 目标类 + remap=false,handler 尾参类型必须对运行时 jar
+  javap 实测,编译期校验不可信。
+
+### 版本工程(1.0.1)
+- modVersion 1.0.0 → 1.0.1。
+- reobfJar 产物名硬编码 → ${modVersion}/${mcVersion} 变量插值,与
+  jar.archiveFileName 同源(根治 bump 双处同步)。
+- mods.toml version → ${modVersion} 模板,processResources expand 展开 +
+  filteringCharset UTF-8(防中文注释 GBK 打糊),版本单一事实源收敛到
+  build.gradle。
+- [x] clean build 通过 + verifyMixinConfig 全绿(2026-11-03:BUILD SUCCESSFUL 10m / 3 mixin OK / 产物 1.0.1+1.20.1-forge.jar 6145B / mods.toml 模板展开 version="1.0.1" 实证)

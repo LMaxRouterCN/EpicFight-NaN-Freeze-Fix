@@ -4,7 +4,7 @@ license="MPL-2.0"
 
 [[mods]]
 modId="epicfightnanafreezefix"
-version="1.0.0"
+version="${modVersion}"
 displayName="EpicFight NaN Freeze Fix"
 authors="LMaxRouterCN"
 description='''
