@@ -1,6 +1,6 @@
 # EpicFight NaN Freeze Fix
 
-修复 Epic Fight(Minecraft 1.20.1 / Forge,20.14.x)的客户端硬冻结。
+修复 Epic Fight(Minecraft 1.20.1 / Forge,20.14.x)的客户端硬冻结 [issue#2625](https://github.com/Antikythera-Studios/epicfight/issues/2625)。
 
 Render thread 会永久卡死在 `AnimationClip.getPoseInTime` 的二分搜索里 —— 根因是零时长循环动画(EMPTY_ANIMATION)在 `AnimationPlayer.tick` 中执行 `elapsedTime %= 0.0F` 产生 NaN,NaN 毒化 `ConcurrentLinkAnimation.startsAt` 后,任何 pose 查询都会把 render thread 带进永不终止的搜索循环。
 

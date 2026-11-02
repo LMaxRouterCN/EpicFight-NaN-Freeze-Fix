@@ -1,0 +1,267 @@
+{
+  "next_id": 22,
+  "memory": {
+    "1": {
+      "temp": 14.14107651859448,
+      "initial_temp": 100,
+      "tags": [
+        "Minecraft",
+        "VS2",
+        "bug根因",
+        "mod兼容",
+        "哨兵坐标"
+      ],
+      "pin": false,
+      "created_at": 1791681656.578624,
+      "last_accessed": 1793555361.0255249
+    },
+    "2": {
+      "temp": 16.539142591634207,
+      "initial_temp": 100,
+      "tags": [
+        "Minecraft",
+        "VS2",
+        "用户偏好",
+        "修复路线"
+      ],
+      "pin": false,
+      "created_at": 1791898916.8178782,
+      "last_accessed": 1793555361.0302708
+    },
+    "3": {
+      "temp": "∞",
+      "initial_temp": 100,
+      "tags": [
+        "待办文件",
+        "备忘录路径"
+      ],
+      "pin": true,
+      "created_at": 1792258648.152172,
+      "last_accessed": 1792258648.1521723
+    },
+    "4": {
+      "temp": 8.748600101981108,
+      "initial_temp": 100,
+      "tags": [
+        "爆炸",
+        "大火",
+        "绿地项目",
+        "可行性审查",
+        "桌面路径",
+        "休眠bat"
+      ],
+      "pin": false,
+      "created_at": 1792261214.864924,
+      "last_accessed": 1793554678.411364
+    },
+    "5": {
+      "temp": 2.0894524105129038,
+      "initial_temp": 100,
+      "tags": [
+        "LLMwc4n项目",
+        "用户求助",
+        "max忙期"
+      ],
+      "pin": false,
+      "created_at": 1792342176.029134,
+      "last_accessed": 1793026737.4873104
+    },
+    "6": {
+      "temp": 0.022216276266729326,
+      "initial_temp": 100,
+      "tags": [
+        "LMaxs-Pipez-fork",
+        "git远程",
+        "未推送"
+      ],
+      "pin": false,
+      "created_at": 1792342268.77141,
+      "last_accessed": 1792342268.7714102
+    },
+    "7": {
+      "temp": 0.022216276266729326,
+      "initial_temp": 100,
+      "tags": [
+        "gh-cli",
+        "搜索索引坑",
+        "数据可信度"
+      ],
+      "pin": false,
+      "created_at": 1792342273.101859,
+      "last_accessed": 1792342273.1018593
+    },
+    "8": {
+      "temp": 0.028711325376543452,
+      "initial_temp": 100,
+      "tags": [
+        "gh-cli",
+        "API坑",
+        "布尔参数",
+        "subscription"
+      ],
+      "pin": false,
+      "created_at": 1792375138.7425172,
+      "last_accessed": 1792375138.7425175
+    },
+    "9": {
+      "temp": 21.434697835979506,
+      "initial_temp": 100,
+      "tags": [
+        "exec指令",
+        "PowerShell嵌套",
+        "引号插值坑"
+      ],
+      "pin": false,
+      "created_at": 1792375141.74595,
+      "last_accessed": 1793558466.6839423
+    },
+    "10": {
+      "temp": 16.552139675742954,
+      "initial_temp": 100,
+      "tags": [
+        "bug根因",
+        "Minecraft",
+        "Ixeris"
+      ],
+      "pin": false,
+      "created_at": 1792413591.8080087,
+      "last_accessed": 1793555361.0760536
+    },
+    "11": {
+      "temp": 0.06866761302459273,
+      "initial_temp": 100,
+      "tags": [
+        "API坑",
+        "PokerAgent"
+      ],
+      "pin": false,
+      "created_at": 1792423021.09744,
+      "last_accessed": 1792423021.0974405
+    },
+    "12": {
+      "temp": 0.07608599781118308,
+      "initial_temp": 100,
+      "tags": [
+        "API坑",
+        "PokerAgent"
+      ],
+      "pin": false,
+      "created_at": 1792424513.202072,
+      "last_accessed": 1792424513.2020724
+    },
+    "13": {
+      "temp": 17.713557644564045,
+      "initial_temp": 100,
+      "tags": [
+        "bug根因，Minecraft",
+        "EpicFight"
+      ],
+      "pin": false,
+      "created_at": 1792952534.3885994,
+      "last_accessed": 1793555361.2951088
+    },
+    "14": {
+      "temp": 0.6905413874132087,
+      "initial_temp": 100,
+      "tags": [
+        "API坑",
+        "PokerAgent"
+      ],
+      "pin": false,
+      "created_at": 1793018044.997875,
+      "last_accessed": 1793018044.9978752
+    },
+    "15": {
+      "temp": 21.98919721110582,
+      "initial_temp": 100,
+      "tags": [
+        "gh-cli",
+        "API坑",
+        "exec指令",
+        "PokerAgent"
+      ],
+      "pin": false,
+      "created_at": 1793022965.8905833,
+      "last_accessed": 1793558466.6850066
+    },
+    "16": {
+      "temp": 17.817988281016426,
+      "initial_temp": 100,
+      "tags": [
+        "EpicFight",
+        "gh-cli",
+        "数据可信度"
+      ],
+      "pin": false,
+      "created_at": 1793022989.745398,
+      "last_accessed": 1793555361.2964997
+    },
+    "17": {
+      "temp": 19.55436191482684,
+      "initial_temp": 100,
+      "tags": [
+        "EpicFight",
+        "修复路线",
+        "Minecraft",
+        "mod兼容",
+        "bug根因"
+      ],
+      "pin": false,
+      "created_at": 1793554455.71631,
+      "last_accessed": 1793555361.2973013
+    },
+    "18": {
+      "temp": 20.390682574579035,
+      "initial_temp": 100,
+      "tags": [
+        "空转教训",
+        "自动模式",
+        "上下文管理",
+        "PokerAgent"
+      ],
+      "pin": false,
+      "created_at": 1793555355.9677653,
+      "last_accessed": 1793555355.9677656
+    },
+    "19": {
+      "temp": 69.83372960937498,
+      "initial_temp": 100,
+      "tags": [
+        "mixin",
+        "remap",
+        "MDG",
+        "Minecraft",
+        "构建坑"
+      ],
+      "pin": false,
+      "created_at": 1793559722.3268964,
+      "last_accessed": 1793559722.3268964
+    },
+    "20": {
+      "temp": 69.83372960937498,
+      "initial_temp": 100,
+      "tags": [
+        "gradle",
+        "wrapper镜像",
+        "dist缓存",
+        "exec指令",
+        "构建坑"
+      ],
+      "pin": false,
+      "created_at": 1793559727.8697886,
+      "last_accessed": 1793559727.869789
+    },
+    "21": {
+      "temp": 100,
+      "initial_temp": 100,
+      "tags": [
+        "EpicFight",
+        "上游PR待办",
+        "开源贡献"
+      ],
+      "pin": false,
+      "created_at": 1793561168.9651525,
+      "last_accessed": 1793561168.9651527
+    }
+  }
+}

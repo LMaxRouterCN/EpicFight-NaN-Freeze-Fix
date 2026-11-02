@@ -1,0 +1,1 @@
+EpicFight NaN Freeze Fix 全链路闭环:repo+release v1.0.0已发布,上游issue#2625评论已发(https://github.com/Antikythera-Studios/epicfight/issues/2625#issuecomment-6562707384),内容:release链接+三层修复简介+built against 20.14.17+计划有空时PR(需fork+遵守贡献规则)。max已批准发出。无待办。唯一远期意向:向上游PR(见长期记忆)。
