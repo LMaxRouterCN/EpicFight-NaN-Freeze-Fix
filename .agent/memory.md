@@ -94,3 +94,15 @@ tag: gradle, wrapper镜像, dist缓存, exec指令, 构建坑
 2026-11-02: EpicFight NaN Freeze Fix已发布(github.com/LMaxRouterCN/EpicFight-NaN-Freeze-Fix,release v1.0.0)。max计划有空时向上游Antikythera-Studios/epicfight提PR(修issue#2625的NaN冻结)。PR需:fork上游+遵守其贡献规则,修复方案=三层mixin(AnimationPlayer.tick根修/ConcurrentLinkAnimation.getPoseByTime洗startsAt/AnimationClip.getPoseInTime入口兜底),本地源码在D:\Documents\mcmod\EpicFight NaN Freeze Fix。max再提epicfight或PR时想起此事。
 tag: EpicFight, 上游PR待办, 开源贡献
 <!-- END:021 -->
+<!-- ID:022 -->
+[2026-11-03] EpicFight NaN Freeze Fix(mixin mod,MPL-2.0,Forge1.20.1,项目根D:\Documents\mcmod\EpicFight NaN Freeze Fix):
+①病灶(epicfight 20.14.17):空动画EMPTY(totalTime=0,isRepeat=true)→AnimationPlayer.tick中elapsedTime%=0产NaN→ConcurrentLinkAnimation.getPoseByTime二分搜索NaN三分支全false区间永不收缩→Render thread冻结。上游issue#2625已发+双dump附件已挂,bot打triage零真人回应,PR躺3-7月,双轨=issue不管+mixin自修。
+②修复三层:AnimationPlayer.tick守卫totalTime>0(根修)/AnimationClip.getPoseInTime洗NaN(兜底)/ConcurrentLinkAnimation洗startsAt。立项动机=附属Weapons of Miracles闭源慢更锁死旧版epicfight,上游合并也不回移。
+③运行时jar=E:\MC\.minecraft\versions\Industrial Revolution 2040\mods\史诗战斗-epic-fight-20.14.17-mc1.20.1-forge.jar(该mods465个jar均中文前缀,英文名正则找jar必漏)。
+④铁律:mod目标类+remap=false时编译期签名校验不可信(dev依赖≠运行时版本,commit cd1a3a7曾关remap连带瞎掉AP校验),mixin handler尾参类型必须对运行时jar javap实测。
+tag: EpicFight, NaN, bug根因, mixin, 修复路线, 项目背景
+<!-- END:022 -->
+<!-- ID:023 -->
+[2026-11-03凌晨终态v2]1.0.1全链闭环:①修复(commit 0002124,分支1.20.1forge)②构建(verifyMixinConfig 3mixin OK,产物6145B)③投放mods(旧lmax前缀1.0.0已清,现存唯一1.0.1)④GitHub发布:repo已public(max此前自建,我"无远程"旧说法已修正),push+tag v1.0.1+release+jar附件全在位,url=https://github.com/LMaxRouterCN/EpicFight-NaN-Freeze-Fix/releases/tag/v1.0.1。决策1C(.agent保持跟踪)/2(直投+清旧)已执行。决策3事实已查明等max一句话:nanhealthfixer=TeamPotato/MIT/零mixin纯事件总线,三监听(LivingDeath/LivingTick→validateHealth:服务端only,血量NaN或<0洗setHealth(0);LivingHurt额外:伤害NaN→取消事件),修生命值系统与本mod动画时间线正交零冲突,去留=纯功能选择(要不要假死修复)。剩余唯一:max进世界双案实测(首帧不崩+JEI漏斗45mb/高炉矿车450/合成10)。教训沉淀:上轮发现origin存在但记忆错记"无远程"→行动前探remote而非信记忆。max仍欠:nanhealthfixer去留表态(可无限期挂起,不催)
+tag: 当前任务, 1.0.1发布, nanhealthfixer定性, 发布闭环
+<!-- END:023 -->
